@@ -1,66 +1,40 @@
+<h1 align="center"> :moneybag: Auction Platform  :moneybag: </h1>
 
-### Basics:
+### Contributors:
 
-#### What is Solidity?
+- :koala: [Radu Nedelcu](https://github.com/Pepi100)
 
-    An object-oriented, high-level language for implementing smart contracts. 
+- :nail_care: [Maria Cioclov](https://github.com/993m)
 
-#### What are smart contracts?
+### Auction Platform
 
-    The building blocks of blockchain-based applications. They represent digital agreements in which the code cannot change.
+This a repository for an auction platform working on the ETH Blockchain, developed using solidity.
 
-### Code:
+### Implementation:
 
-```cpp
-  // Write functions cost gas
-  function setName (string memory _s ) public {
-    name = _s;
-  }
+Build an auction platform in which:
+    
+- [ ] Users can start a new auction;
 
-  // Read functions are free, reading from the blockchain is free
-  function getName() public view returns (string memory){
-    return name;
-  }
+- [ ] Users can bid on an auction;
 
-```
+- [ ] Each user can see what the highest bid is on any auction;
 
-Keywords:
+- [ ] Once a new highest bid is placed, the previous highest bidded should recieve a notification of the event;
 
-```cpp
-  view = keyword means that the function does not modify the state of the blockchain
+- [ ] Auctions must have a time limit up to which bidding is possible;
 
-  pure = functions do not modify the state but also do not read the state
+- [ ] With every new bid the time limit on an auction should increase, if it was below a certain time;
 
-  payable = functions are allowed to recieve ETH cryptocurrency
-```
+- [ ] Users that start an auction must not be able to place bid on that auction. 
 
-Mappings:
+### Bibliography:
 
-```cpp
-    // Mappings are equivalent to python maps, hash tables, etc.
+- **[SolidityLang Website](https://soliditylang.org/)**
 
-  mapping (uint => string) public names;
-  mapping (address => bool) public hasVoted;
-  mapping (address => mapping(uint => bool)) public myMapping;
+- **[Learn Solidity in 20 Minutes!](https://www.youtube.com/watch?v=RQzuQb0dfBM)**
 
-```
+- **[Getting Started With Remix (Solidity) in 2 mins](https://www.youtube.com/watch?v=vH8T3In6ZkE)**
 
+- **[GTutorial Of Real Solidity Smart Contract](https://www.youtube.com/watch?v=9liQs-h8hB0)**
 
-Structs:
-```cpp
-    // very similar to cpp
-
-   struct Book{
-       string title;
-       address author;
-       bool completed;
-   }
-
-    Book books[20];
-```
-
-
-### Sources:
-- https://github.com/tiulia/blockchain_an3
-
-- https://www.youtube.com/watch?v=RQzuQb0dfBM
