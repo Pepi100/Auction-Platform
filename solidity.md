@@ -11,7 +11,7 @@
 
 ### Code:
 
-```cpp
+```solidity
   // Write functions cost gas
   function setName (string memory _s ) public {
     name = _s;
@@ -36,7 +36,7 @@ Keywords:
 
 Mappings:
 
-```cpp
+```solidity
     // Mappings are equivalent to python maps, hash tables, etc.
 
   mapping (uint => string) public names;
@@ -47,7 +47,7 @@ Mappings:
 
 
 Structs:
-```cpp
+```solidity
     // very similar to cpp
 
    struct Book{
