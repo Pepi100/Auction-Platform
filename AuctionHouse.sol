@@ -13,8 +13,10 @@ contract AuctionHouse {
 
     event AuctionCreated(uint indexed auctionId, address indexed auctionAddress);
 
-    constructor() {
+    constructor(uint _houseFee) {
+        require(_houseFee > 100 || _houseFee < 0, "House fee must be between 0 and 100");
         owner = msg.sender;
+        houseFee = _houseFee;
     }
 
     modifier onlyOwner() {
@@ -28,18 +30,36 @@ contract AuctionHouse {
         emit AuctionCreated(numAuctions, address(newAuction));
         numAuctions++;
     }
-  
+
+    function bidAuction(uint id) external {
+        require(id < numAuctions,"Auction doesn't exist!");
+        Auction auc = auctions[id];
+        
+        // TODO / TOTEST
+        (bool success) = auc.call{value: msg.value}(
+            abi.encodeWithSignature("placeBid()")
+        );
+        require(success, "Failed to place bid in auction");
+    }
+
+    function payoutPrice(uint price, uint fee) private pure returns (uint){
+        return price * (100 - fee) / 100;
+    }
+    
 
 // GETTERS
     function getNumAuctions() external view returns (uint) {
         return numAuctions;
     }
 
+    function getAuction(uint id) external view returns(address){
+        return auctions[id];
+    }
+
     function getOwner() external view returns (address) {
         return owner;
     }
 
-   
 
 
 }

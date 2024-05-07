@@ -4,7 +4,7 @@ pragma solidity >=0.8.2 <0.9.0;
 import "@openzeppelin/contracts/utils/math/Math.sol";
 
 contract Auction {
-    address payable public owner;
+    address payable public beneficiary;
     string public auctionItem;
     uint startTime;
     uint endTime;
@@ -26,14 +26,12 @@ contract Auction {
     }
 
     modifier isHighest() {
-        // what is msg here?
         require(bidsNumber == 0 || msg.value > bids[bidsNumber - 1].value, "Bid must be higher than current highest bid");
         _;
     }
 
-    modifier notOwner() {
-        // what is msg here?
-        require(tx.origin != owner, "The owner cannot bid on his own auction.");
+    modifier notBeneficiary() {
+        require(tx.origin != beneficiary, "The beneficiary cannot bid on his own auction.");
         _;
     }
 
@@ -42,8 +40,8 @@ contract Auction {
     event BidPlaced(address indexed bidder, uint amount);
     event AuctionEnded(address indexed winner, uint amount);
 
-    constructor(address payable _owner, string memory _auctionItem) {
-        owner = _owner;
+    constructor(address payable _beneficiary, string memory _auctionItem) {
+        beneficiary = _beneficiary;
         auctionItem = _auctionItem;
         bidsNumber = 0;
 
@@ -54,7 +52,7 @@ contract Auction {
 
     
 
-    function placeBid() external payable isActive isHighest notOwner{
+    function placeBid() external payable isActive isHighest notBeneficiary{
         
         Bid memory newBid;
         newBid.bidder = msg.sender;
@@ -97,6 +95,7 @@ contract Auction {
     function getContractBalance() public view returns(uint){
         return address(this).balance;
     }
+
 
 
 }
