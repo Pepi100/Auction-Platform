@@ -5,6 +5,7 @@ pragma solidity >=0.8.2 <0.9.0;
 import "./Auction.sol";
 
 contract AuctionHouse {
+    
     address public owner;
     uint public numAuctions;
     uint8 public houseFee;
@@ -21,10 +22,24 @@ contract AuctionHouse {
         _;
     }
 
-    function createAuction() external onlyOwner {
-        Auction newAuction = new Auction(payable(msg.sender));
+    function createAuction(string memory auctionItem) external {
+        Auction newAuction = new Auction(payable(msg.sender), auctionItem);
         auctions[numAuctions] = address(newAuction);
         emit AuctionCreated(numAuctions, address(newAuction));
         numAuctions++;
     }
+  
+
+// GETTERS
+    function getNumAuctions() external view returns (uint) {
+        return numAuctions;
+    }
+
+    function getOwner() external view returns (address) {
+        return owner;
+    }
+
+   
+
+
 }

@@ -18,15 +18,17 @@ Build an auction platform in which:
 
 - [ ] Users can bid on an auction;
 
+- [ ] The highest bidder should recieve the prize after the auction ends.
+
 - [ ] Each user can see what the highest bid is on any auction;
 
-- [ ] Once a new highest bid is placed, the previous highest bidded should recieve a notification of the event;
+- [ ] Once a new highest bid is placed, the previous highest bidded should recieve a notification of the event. His bid should also be returned;
 
-- [ ] Auctions must have a time limit up to which bidding is possible;
+- [x] Auctions must have a time limit up to which bidding is possible;
 
-- [ ] With every new bid the time limit on an auction should increase, if it was below a certain time;
+- [x] With every new bid the time limit on an auction should increase, if it was below a certain time;
 
-- [ ] Users that start an auction must not be able to place bid on that auction. 
+- [x] Users that start an auction must not be able to place bid on that auction. 
 
 ### Bibliography:
 
