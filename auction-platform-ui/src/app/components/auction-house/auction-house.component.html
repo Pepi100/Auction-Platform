@@ -1,0 +1,36 @@
+<div class="container">
+    <h1>Welcome to the Auction House!</h1>
+    <p>Owner: {{owner}}</p>
+
+    <!-- Create Auction Form -->
+    <form (submit)="createAuction(auctionItem.value)">
+      <div class="form-group">
+        <label for="auctionItem">Auction Item:</label>
+        <input type="text" class="form-control" id="auctionItem" #auctionItem required>
+      </div>
+      <button type="submit" class="btn btn-primary">Create Auction</button>
+    </form>
+  
+    <!-- Bid on Auction Form -->
+    <form (submit)="bidAuction(+auctionId.value, +amount.value)">
+      <div class="form-group">
+        <label for="auctionId">Auction ID:</label>
+        <input type="number" class="form-control" id="auctionId" #auctionId required>
+      </div>
+      <div class="form-group">
+        <label for="amount">Bid Amount (in wei):</label>
+        <input type="number" class="form-control" id="amount" #amount required>
+      </div>
+      <button type="submit" class="btn btn-primary">Bid on Auction</button>
+    </form>
+    
+    <!-- List of Existing Auctions -->
+    <div *ngIf="auctions.length > 0">
+        <h2>All Auctions:</h2>
+        <ul>
+        <li *ngFor="let auction of auctions">{{ auction }}</li>
+        </ul>
+    </div>
+</div>
+
+  
