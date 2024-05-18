@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Web3Service } from './services/web3.service';
+import { UserService } from './services/user-profile.service';
 
 declare let window: any;
 
@@ -12,7 +13,7 @@ export class AppComponent implements OnInit {
   address: string | null = null;
   balance: string | null = null;
 
-  constructor(private web3Service: Web3Service) {}
+  constructor(private web3Service: Web3Service, private userService: UserService) {} 
 
   async ngOnInit() {
     const savedAddress = localStorage.getItem('userAddress');
@@ -26,7 +27,7 @@ export class AppComponent implements OnInit {
 
   async checkMetaMaskConnection() {
     try {
-      if (typeof window.ethereum !== 'undefined') {
+      if (this.web3Service.web3) {
         const accounts = await this.web3Service.web3.eth.getAccounts();
         if (accounts.length > 0) {
           const userAccount = accounts[0];
@@ -34,18 +35,21 @@ export class AppComponent implements OnInit {
           this.address = userAccount;
           localStorage.setItem('userAddress', userAccount);
           await this.loadBalance(userAccount);
+          this.userService.newUser(userAccount).subscribe(() => {
+            console.log('User created');
+          });
         }
       } else {
-        console.log('MetaMask is not installed');
+        console.log('Web3Service is not initialized');
       }
     } catch (error) {
       console.error('Error checking MetaMask connection:', error);
     }
   }
-
+  
   async connectToMetaMask() {
     try {
-      if (typeof window.ethereum !== 'undefined') {
+      if (this.web3Service.web3) {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
         const accounts = await this.web3Service.web3.eth.getAccounts();
         const userAccount = accounts[0];
@@ -53,13 +57,17 @@ export class AppComponent implements OnInit {
         this.address = userAccount;
         localStorage.setItem('userAddress', userAccount);
         await this.loadBalance(userAccount);
+        this.userService.newUser(userAccount).subscribe(() => {
+          console.log('User created');
+        });
       } else {
-        console.log('MetaMask is not installed');
+        console.log('Web3Service is not initialized');
       }
     } catch (error) {
       console.error('Error connecting to MetaMask:', error);
     }
   }
+  
 
   async loadBalance(address: string) {
     try {
