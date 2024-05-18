@@ -1,4 +1,17 @@
-<button (click)="connectToMetaMask()">Connect to MetaMask</button>
+<!-- src/app/app.component.html -->
+<div class="container">
+    <div *ngIf="address; else connectBlock">
+      <h3>Connected Account</h3>
+      <p>Address: {{ address }}</p>
+      <p>Balance: {{ balance }} SepoliaETH</p>
+      <button (click)="disconnect()">Disconnect</button>
+      <app-auction-house></app-auction-house>
+    </div>
+   
+    <ng-template #connectBlock>
+      <button (click)="connectToMetaMask()">Connect to MetaMask</button>
+    </ng-template>
+  </div>
+  
 
-<app-auction-house></app-auction-house>
 
