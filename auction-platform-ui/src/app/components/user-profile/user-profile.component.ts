@@ -22,6 +22,7 @@ export class UserProfileComponent implements OnInit {
 
   loadProfile() {
     this.userService.getProfile(this.userAddress).subscribe(profile => {
+      console.log(profile);
       this.userEmail = profile[0];
       this.totalBids = parseInt(profile[1]);
       this.totalAuctions = parseInt(profile[2]);
@@ -55,6 +56,7 @@ export class UserProfileComponent implements OnInit {
       this.userProfileUpdated.emit();
     });
   }
+  
 }
 
 

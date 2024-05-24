@@ -1,55 +1,71 @@
-<!-- auction-house.component.html -->
-<div>
-  <h2>Auction House</h2>
+<div class="d-flex justify-content-center my-4">
+  <a class="btn btn-primary mx-2" [routerLink]="['/']">Your Account</a>
+  <a class="btn btn-primary mx-2" [routerLink]="['/auction-house']">Auction House</a>
+</div>
 
-  <div *ngIf="owner">
-    <p>Contract Owner: {{ owner }}</p>
-  </div>
-  <div>
-    <p>House Balance: {{ houseBalance }} ETH</p>
-    <p>House Fee: {{ houseFee }}%</p>
-  </div>
+<div class="container mt-5 pt-4">
+  <h2 class="mb-4 text-center">Auction House</h2>
 
-  <div>
-    <h3>Create Auction</h3>
-    <form (ngSubmit)="createAuction()">
-      <label for="auctionItem">Item: </label>
-      <input id="auctionItem" [(ngModel)]="newAuctionItem" name="auctionItem" required>
-      <br>
-      <label for="auctionDuration">Duration (minutes): </label>
-      <input id="auctionDuration" type="number" [(ngModel)]="newAuctionDuration" name="auctionDuration" required>
-      <br>
-      <button type="submit">Create Auction</button>
-    </form>
-  </div>
-
-  <div>
-    <h3>Auctions</h3>
-    <div *ngFor="let auction of auctions; let i = index">
-      <p>Auction {{ i + 1 }}</p>
-      <p>Item: {{ auction.auctionItem }}</p>
-      <p>Owner: {{ auction.auctionOwner }}</p>
-      <p>Start Time: {{ auction.startTime.toString() }}</p>
-      <p>End Time: {{ auction.endTime.toString() }}</p>
-      <p>Number of Bids: {{ auction.bids.length }}</p>
-      <p *ngIf="auction.bids.length > 0">Highest Bid: {{ web3.utils.fromWei(auction.bids[auction.bids.length - 1], 'ether') }} ETH</p>
-      <p *ngIf="auction.bids.length === 0">No bids yet</p>
-      <button (click)="toggleBids(i)">{{ showBids[i] ? 'Hide' : 'Show' }} Bids</button>
-      <div *ngIf="showBids[i]">
-        <h4>Bids</h4>
-        <ul>
-          <li *ngFor="let bid of auction.bids; let j = index">
-            {{ j + 1 }}: {{ web3.utils.fromWei(bid, 'ether') }} ETH by {{ auction.bidders[j] }}
-          </li>
-        </ul>
-      </div>
-      <form (ngSubmit)="placeBid(i)">
-        <label for="bidAmount">Bid Amount (ETH): </label>
-        <input id="bidAmount" type="number" [(ngModel)]="bidAmount" name="bidAmount" required>
-        <button type="submit">Place Bid</button>
-      </form>
-      <button (click)="getHighestBid(i)">Get Highest Bid</button>
-      <p *ngIf="highestBid && highestBid.bidder">{{ highestBid.value }} ETH by {{ highestBid.bidder }}</p>
+  <div class="card mb-4">
+    <div class="card-body">
+      <p><strong>Contract Owner:</strong> {{ owner }}</p>
     </div>
-    
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3 class="card-title">Create Auction</h3>
+      <form (ngSubmit)="createAuction()">
+        <div class="form-group mb-3">
+          <label for="auctionItem" class="form-label">Item:</label>
+          <input id="auctionItem" class="form-control" [(ngModel)]="newAuctionItem" name="auctionItem" required>
+        </div>
+        <div class="form-group mb-3">
+          <label for="auctionDuration" class="form-label">Duration (minutes):</label>
+          <input id="auctionDuration" type="number" class="form-control" [(ngModel)]="newAuctionDuration" name="auctionDuration" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Auction</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-4 mb-4" *ngFor="let auction of auctions; let i = index">
+      <div class="card h-100">
+        <div class="card-body d-flex flex-column">
+          <h4 class="card-title">Auction {{ i + 1 }}</h4>
+          <p><strong>Item:</strong> {{ auction.auctionItem }}</p>
+          <p><strong>Owner:</strong> {{ auction.auctionOwner }}</p>
+          <p><strong>Start Time:</strong> {{ auction.startTimeFormatted }}</p>
+          <p><strong>End Time:</strong> {{ auction.endTimeFormatted }}</p>
+          <p><strong>Status:</strong> {{ auction.isActive ? 'Active' : 'Ended' }}</p>
+          <p><strong>Number of Bids:</strong> {{ auction.bids.length }}</p>
+
+          <button (click)="showHighestBid(i)" class="btn btn-primary mb-2">Show Highest Bid</button>
+          <div *ngIf="auction.showHighestBid">
+            <p *ngIf="auction.highestBid">
+              <strong>Highest Bid:</strong> {{ web3.utils.fromWei(auction.highestBid.value, 'ether') }} ETH by {{ auction.highestBid.bidder }}
+            </p>
+            <p *ngIf="!auction.highestBid">No bids yet</p>
+          </div>
+
+          <button (click)="toggleAllBids(i)" class="btn btn-secondary mb-2">Show All Bids</button>
+          <div *ngIf="auction.showAllBids">
+            <div *ngIf="auction.bids.length > 0">
+              <p *ngFor="let bid of auction.bids; let j = index">
+                <strong>Bid {{ j + 1 }}:</strong> {{ web3.utils.fromWei(bid, 'ether') }} ETH by {{ auction.bidders[j] }}
+              </p>
+            </div>
+            <p *ngIf="auction.bids.length === 0">No bids yet</p>
+          </div>
+
+          <div class="form-group mt-3">
+            <label for="bidAmount" class="form-label">Bid Amount (ETH):</label>
+            <input id="bidAmount" type="number" class="form-control" [(ngModel)]="auction.bidAmount" name="bidAmount">
+          </div>
+          <button (click)="placeBid(i)" class="btn btn-success mt-2">Place Bid</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

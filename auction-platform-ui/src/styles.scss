@@ -1,1 +1,94 @@
-/* You can add global styles to this file, and also import other style files */
+$primary-color: #336699; // Deep Blue
+// or
+// $primary-color: #333333; // Dark Gray
+
+$font-heading: 'Playfair Display', serif;
+$font-body: 'Lato', sans-serif;
+$card-border-radius: 10px;
+
+// Background colors
+$background-color-light-gray: #f8f9fa;
+$background-color-white: #fff;
+$background-color-light-blue: #cfe2ff;
+$background-color-dark-gray: #333; // Change to dark gray if you choose it as primary color
+
+body {
+  font-family: $font-body, Arial, sans-serif !important;
+  background-color: $background-color-light-gray !important;
+  color: #333 !important;
+}
+
+.page-background {
+  background-color: $background-color-light-gray !important; 
+}
+
+.btn-primary {
+  background-color: $primary-color !important;
+  border-color: $primary-color !important;
+  &:hover {
+    background-color: darken($primary-color, 10%) !important;
+    border-color: darken($primary-color, 10%) !important;
+  }
+}
+
+.btn-link {
+  color: $primary-color !important;
+  &:hover {
+    color: darken($primary-color, 10%) !important;
+  }
+}
+
+.card {
+  border-radius: $card-border-radius !important;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  background-color: $background-color-white !important;
+}
+
+.card-title {
+  font-family: $font-heading, serif !important;
+  color: $primary-color !important;
+}
+
+.card-body {
+  padding: 1.5rem !important;
+}
+
+h2, h3, h4, h5 {
+  font-family: $font-heading, serif !important;
+  color: $primary-color !important;
+}
+
+.form-control {
+  border: 1px solid darken($primary-color, 30%);
+  &:focus {
+    border-color: $primary-color !important;
+    box-shadow: 0 0 0 0.2rem rgba(255, 64, 129, 0.25) !important;
+  }
+}
+
+.form-label {
+  color: $primary-color;
+}
+
+.container {
+  margin-top: 2rem;
+}
+
+.d-flex.justify-content-center {
+  margin-bottom: 2rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-5 {
+  margin-top: 3rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}

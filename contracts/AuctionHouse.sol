@@ -7,7 +7,7 @@ interface UserProfileInterface {
     function newBid(address _address) external;
 
     function newAuction(address _address) external;
-    // Add other functions from contract A that you want to call here
+    
 }
 
 contract AuctionHouse {
@@ -48,6 +48,11 @@ contract AuctionHouse {
         _;
     }
 
+    modifier notZero() {
+        require(msg.value != 0, "Bid must be higher than 0");
+        _;
+    }
+
 
     // ACTIONS
     constructor(uint256 _houseFee) {
@@ -68,10 +73,10 @@ contract AuctionHouse {
     ) external {
         require(_startTime < _endTime, "Start time must be before end time");
 
-        // Increment auction count to get a new auction ID
+        
         numAuctions++;
 
-        // Create a new auction and add it to the mapping
+        
 
         uint256[] memory emptyArray;
         address[] memory emptyAddresses;
@@ -87,11 +92,11 @@ contract AuctionHouse {
 
         userProfile.newAuction(msg.sender);
 
-        // Emit an event for the new auction
+        
         emit AuctionCreated(numAuctions, _auctionItem);
     }
 
-    function bid(uint256 auctionId) external payable {
+    function bid(uint256 auctionId) external payable notZero{
         require(
             auctionId <= numAuctions && auctionId > 0,
             "That auction doesn't exist"
@@ -108,19 +113,19 @@ contract AuctionHouse {
                 "That bid is too small"
             );
 
-            // Refund the previous highest bidder
+            
             address previousBidder = auc.bidders[auc.bids.length - 1];
             uint256 previousValue = auc.bids[auc.bids.length - 1];
             payable(previousBidder).transfer(previousValue);
         }
 
-        // Add the new bid to the array in the auction
+        
         auc.bids.push(msg.value);
         auc.bidders.push(msg.sender);
 
         userProfile.newBid(msg.sender);
 
-        // Emit an event for the new bid
+        
         emit BidPlaced(auctionId, msg.sender, msg.value);
     }
 

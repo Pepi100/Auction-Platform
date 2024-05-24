@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Web3Service } from './web3.service';
 import Web3 from 'web3';
-import { Observable, from } from 'rxjs';
+import { Observable, from, ReplaySubject } from 'rxjs';
 import { userProfileContractABI } from '../contracts/user-profile-abi';
 
 @Injectable({
@@ -11,6 +11,7 @@ export class UserService {
   web3: any;
   userProfileContract: any;
   contractAddress = '0xF38e58C727DE3D0F1EB932E3D70d736068728d16';
+  private initialized = false;
 
   constructor(private web3Service: Web3Service) {
     this.initializeWeb3();
@@ -26,25 +27,32 @@ export class UserService {
     }
     
     this.userProfileContract = new this.web3.eth.Contract(userProfileContractABI, this.contractAddress);
+    this.initialized = true;
+  }
+
+  private async ensureInitialized() {
+    if (!this.initialized) {
+      await this.initializeWeb3();
+    }
   }
 
   getProfile(userAddress: string): Observable<any> {
-    return from(this.userProfileContract.methods.getProfile(userAddress).call());
+    return from(this.ensureInitialized().then(() => this.userProfileContract.methods.getProfile(userAddress).call()));
   }
 
   updateProfile(userAddress: string, userEmail: string): Observable<any> {
-    return from(this.userProfileContract.methods.updateProfile(userAddress, userEmail).send({ from: userAddress }));
+    return from(this.ensureInitialized().then(() => this.userProfileContract.methods.updateProfile(userAddress, userEmail).send({ from: userAddress })));
   }
 
   newUser(userAddress: string): Observable<any> {
-    return from(this.userProfileContract.methods.newUser().send({ from: userAddress }));
+    return from(this.ensureInitialized().then(() => this.userProfileContract.methods.newUser().send({ from: userAddress })));
   }
 
   newAuction(userAddress: string): Observable<any> {
-    return from(this.userProfileContract.methods.newAuction(userAddress).send({ from: userAddress }));
+    return from(this.ensureInitialized().then(() => this.userProfileContract.methods.newAuction(userAddress).send({ from: userAddress })));
   }
 
   newBid(userAddress: string): Observable<any> {
-    return from(this.userProfileContract.methods.newBid(userAddress).send({ from: userAddress }));
+    return from(this.ensureInitialized().then(() => this.userProfileContract.methods.newBid(userAddress).send({ from: userAddress })));
   }
 }
